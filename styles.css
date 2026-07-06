@@ -111,36 +111,61 @@
 }
 
 .signpost-category-head {
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
-  padding: 12px;
-  cursor: pointer;
   background: var(--background-primary);
 }
 
-.signpost-category-head:hover {
+.signpost-category-title {
+  margin: 0;
+}
+
+/* The disclosure is a real <button>; override Obsidian's default button chrome so
+   it reads as a full-width header row, and give it a clear keyboard focus ring. */
+.signpost-disclosure {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+  text-align: left;
+  color: var(--text-normal);
+  font-size: var(--font-ui-medium);
+  font-weight: var(--font-semibold);
+}
+
+.signpost-disclosure:hover {
   background: var(--background-modifier-hover);
 }
 
-.signpost-chevron,
-.signpost-category-icon {
+.signpost-disclosure:focus-visible {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: -2px;
+}
+
+.signpost-chevron {
   color: var(--text-muted);
   flex-shrink: 0;
-  margin-top: 1px;
+  display: inline-flex;
 }
 
 .signpost-category-icon {
   color: var(--interactive-accent);
+  flex-shrink: 0;
+  display: inline-flex;
 }
 
-.signpost-category-titles h3 {
-  margin: 0;
-  font-size: var(--font-ui-medium);
+.signpost-category-title-text {
+  flex: 1;
+  min-width: 0;
 }
 
 .signpost-category-blurb {
-  margin: 2px 0 0;
+  margin: 0;
+  padding: 0 12px 12px;
   color: var(--text-muted);
   font-size: var(--font-ui-smaller);
 }
@@ -211,9 +236,8 @@
   border-color: var(--interactive-accent);
 }
 
-.signpost-plugin.is-enabled {
-  opacity: 0.72;
-}
+/* Enabled rows are de-emphasized by their green dot + "Enabled" label rather than
+   by container opacity, which would drag the row's text below WCAG AA contrast. */
 
 .signpost-status {
   flex-shrink: 0;
@@ -267,12 +291,11 @@
   color: var(--text-faint);
 }
 
-.signpost-state-label.is-enabled {
-  color: var(--color-green);
-}
-
+/* The status hue lives on the dot (a graphic), not on this small text — saturated
+   green/yellow as text fails WCAG AA contrast on a light background. */
+.signpost-state-label.is-enabled,
 .signpost-state-label.is-installed {
-  color: var(--color-yellow);
+  color: var(--text-muted);
 }
 
 .signpost-role {

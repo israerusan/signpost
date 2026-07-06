@@ -103,13 +103,27 @@ export class SignpostView extends ItemView {
     this.rendered = true;
   }
 
+  /** Re-focus a control by selector after a rebuild so keyboard focus survives. */
+  private focusAfterRender(selector: string): void {
+    this.contentEl.querySelector<HTMLElement>(selector)?.focus();
+  }
+
+  /** A purely decorative icon, hidden from screen readers so it isn't read as noise. */
+  private decorIcon(parent: HTMLElement, cls: string, icon: string): void {
+    const el = parent.createSpan({ cls });
+    el.setAttribute("aria-hidden", "true");
+    setIcon(el, icon);
+  }
+
   private renderHeader(root: HTMLElement): void {
     const header = root.createDiv({ cls: "signpost-header" });
     header.createEl("h2", { text: PRODUCT_NAME, cls: "signpost-title" });
     header.createEl("p", { text: TAGLINE, cls: "signpost-tagline" });
 
     const creed = header.createDiv({ cls: "signpost-creed" });
-    setIcon(creed.createSpan({ cls: "signpost-creed-icon" }), "leaf");
+    const creedIcon = creed.createSpan({ cls: "signpost-creed-icon" });
+    creedIcon.setAttribute("aria-hidden", "true");
+    setIcon(creedIcon, "leaf");
     creed.createSpan({ text: PHILOSOPHY });
 
     const bar = header.createDiv({ cls: "signpost-toolbar" });
@@ -117,8 +131,14 @@ export class SignpostView extends ItemView {
     const browseBtn = bar.createEl("button", { cls: "signpost-btn", text: "Browse all community add-ons" });
     browseBtn.addEventListener("click", () => openCommunityBrowser(this.app));
 
-    const refreshBtn = bar.createEl("button", { cls: "signpost-btn signpost-btn-ghost", text: "Refresh status" });
-    refreshBtn.addEventListener("click", () => this.refreshAndRender());
+    const refreshBtn = bar.createEl("button", { cls: "signpost-btn signpost-btn-ghost signpost-refresh", text: "Refresh status" });
+    refreshBtn.addEventListener("click", () => {
+      this.refreshAndRender();
+      // If the repaint happened it destroyed this button; re-focus its replacement
+      // so a keyboard user isn't dumped to the top of the view. Harmless no-op if
+      // nothing was rebuilt (same node still focused).
+      this.focusAfterRender(".signpost-refresh");
+    });
 
     // A <label> wrapping the checkbox: clicking the text toggles it and assistive
     // tech announces the text as the control's name (no id/for wiring needed).
@@ -129,6 +149,7 @@ export class SignpostView extends ItemView {
       this.plugin.settings.hideInstalled = cb.checked;
       void this.plugin.saveSettings();
       this.render();
+      this.focusAfterRender(".signpost-toggle input");
     });
     toggle.createSpan({ text: "Hide what I've already enabled" });
   }
@@ -137,29 +158,32 @@ export class SignpostView extends ItemView {
     const collapsed = this.plugin.settings.collapsedCategories.includes(category.id);
     const section = root.createDiv({ cls: "signpost-category" });
 
+    const bodyId = `signpost-cat-${category.id}`;
     const head = section.createDiv({ cls: "signpost-category-head" });
-    // Not a real <button> (it wraps heading/paragraph block content); give it the
-    // button role, focusability, and keyboard activation so it isn't mouse-only.
-    head.setAttribute("role", "button");
-    head.setAttribute("tabindex", "0");
-    head.setAttribute("aria-expanded", String(!collapsed));
-    const chevron = head.createSpan({ cls: "signpost-chevron" });
+
+    // A real <button> inside the <h3> is the accessible disclosure pattern: the
+    // heading stays a heading (screen-reader heading navigation works), and the
+    // button gets a native focus ring plus Enter/Space for free. Decorative icons
+    // are hidden so the button's name is just the category title.
+    const heading = head.createEl("h3", { cls: "signpost-category-title" });
+    const btn = heading.createEl("button", { cls: "signpost-disclosure" });
+    btn.setAttribute("aria-expanded", String(!collapsed));
+    btn.setAttribute("aria-controls", bodyId);
+    const chevron = btn.createSpan({ cls: "signpost-chevron" });
+    chevron.setAttribute("aria-hidden", "true");
     setIcon(chevron, collapsed ? "chevron-right" : "chevron-down");
-    setIcon(head.createSpan({ cls: "signpost-category-icon" }), category.icon);
-    const titles = head.createDiv({ cls: "signpost-category-titles" });
-    titles.createEl("h3", { text: category.title });
-    titles.createEl("p", { text: category.blurb, cls: "signpost-category-blurb" });
+    const catIcon = btn.createSpan({ cls: "signpost-category-icon" });
+    catIcon.setAttribute("aria-hidden", "true");
+    setIcon(catIcon, category.icon);
+    btn.createSpan({ cls: "signpost-category-title-text", text: category.title });
+
+    head.createEl("p", { text: category.blurb, cls: "signpost-category-blurb" });
 
     const body = section.createDiv({ cls: "signpost-category-body" });
+    body.id = bodyId;
     if (collapsed) body.addClass("is-collapsed");
 
-    head.addEventListener("click", () => void this.toggleCategory(category.id, head, body, chevron));
-    head.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        void this.toggleCategory(category.id, head, body, chevron);
-      }
-    });
+    btn.addEventListener("click", () => void this.toggleCategory(category.id, btn, body, chevron));
 
     for (const loadout of category.loadouts) {
       this.renderLoadout(body, loadout);
@@ -168,7 +192,7 @@ export class SignpostView extends ItemView {
 
   private async toggleCategory(
     id: string,
-    head: HTMLElement,
+    btn: HTMLElement,
     body: HTMLElement,
     chevron: HTMLElement
   ): Promise<void> {
@@ -178,7 +202,7 @@ export class SignpostView extends ItemView {
     if (nowCollapsed) list.push(id);
     else list.splice(idx, 1);
     body.toggleClass("is-collapsed", nowCollapsed);
-    head.setAttribute("aria-expanded", String(!nowCollapsed));
+    btn.setAttribute("aria-expanded", String(!nowCollapsed));
     setIcon(chevron, nowCollapsed ? "chevron-right" : "chevron-down");
     await this.plugin.saveSettings();
   }
@@ -187,7 +211,7 @@ export class SignpostView extends ItemView {
     const card = body.createDiv({ cls: "signpost-loadout" });
 
     const q = card.createDiv({ cls: "signpost-problem" });
-    setIcon(q.createSpan({ cls: "signpost-problem-icon" }), "help-circle");
+    this.decorIcon(q, "signpost-problem-icon", "help-circle");
     q.createSpan({ text: loadout.problem });
 
     card.createEl("p", { text: loadout.summary, cls: "signpost-summary" });
@@ -208,7 +232,7 @@ export class SignpostView extends ItemView {
 
     if (loadout.tip) {
       const tip = card.createDiv({ cls: "signpost-tip" });
-      setIcon(tip.createSpan({ cls: "signpost-tip-icon" }), "lightbulb");
+      this.decorIcon(tip, "signpost-tip-icon", "lightbulb");
       tip.createSpan({ text: loadout.tip });
     }
   }
@@ -218,8 +242,10 @@ export class SignpostView extends ItemView {
     const row = list.createDiv({ cls: `signpost-plugin is-${state}` });
     if (ref.core) row.addClass("is-core");
 
+    // The dot's meaning is fully carried by the adjacent text label, so hide it.
     const status = row.createDiv({ cls: "signpost-status" });
     const dot = status.createSpan({ cls: `signpost-dot is-${state}` });
+    dot.setAttribute("aria-hidden", "true");
     setIcon(dot, state === "missing" ? "circle" : "check");
 
     const main = row.createDiv({ cls: "signpost-plugin-main" });
@@ -231,7 +257,7 @@ export class SignpostView extends ItemView {
     main.createDiv({ text: ref.role, cls: "signpost-role" });
     if (ref.note) {
       const note = main.createDiv({ cls: "signpost-note" });
-      setIcon(note.createSpan({ cls: "signpost-note-icon" }), "info");
+      this.decorIcon(note, "signpost-note-icon", "info");
       note.createSpan({ text: ref.note });
     }
 
