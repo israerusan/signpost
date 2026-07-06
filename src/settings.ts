@@ -1,13 +1,6 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
 import type SignpostPlugin from "./main";
-import type { SignpostSettings } from "./types";
 import { openCommunityBrowser } from "./core/openPlugin";
-
-export const DEFAULT_SETTINGS: SignpostSettings = {
-  version: 1,
-  collapsedCategories: [],
-  hideInstalled: false,
-};
 
 export class SignpostSettingTab extends PluginSettingTab {
   constructor(app: App, private plugin: SignpostPlugin) {

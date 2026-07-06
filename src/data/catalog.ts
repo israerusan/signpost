@@ -379,7 +379,7 @@ export const CATALOG: Category[] = [
           {
             id: "obsidian-kanban",
             name: "Kanban",
-            repo: "mgmeyers/obsidian-kanban",
+            repo: "obsidian-community/obsidian-kanban",
             role: "Board-style spatial layout for stages and workflows, stored as Markdown.",
           },
         ],

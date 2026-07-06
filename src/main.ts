@@ -1,6 +1,7 @@
 import { Plugin, WorkspaceLeaf } from "obsidian";
 import type { SignpostSettings } from "./types";
-import { DEFAULT_SETTINGS, SignpostSettingTab } from "./settings";
+import { DEFAULT_SETTINGS, sanitizeSettings } from "./core/settings";
+import { SignpostSettingTab } from "./settings";
 import { SignpostView, VIEW_TYPE_SIGNPOST } from "./ui/SignpostView";
 
 export default class SignpostPlugin extends Plugin {
@@ -53,8 +54,7 @@ export default class SignpostPlugin extends Plugin {
   }
 
   async loadSettings(): Promise<void> {
-    const data = (await this.loadData()) as Partial<SignpostSettings> | null;
-    this.settings = Object.assign(structuredClone(DEFAULT_SETTINGS), data ?? {});
+    this.settings = sanitizeSettings(await this.loadData());
   }
 
   async saveSettings(): Promise<void> {

@@ -7,6 +7,11 @@ import { CATALOG } from "../src/data/catalog";
 
 const catIds = new Set<string>();
 const loadoutIds = new Set<string>();
+// A plugin id can legitimately appear in more than one loadout, but every field
+// derived from that id (repo, name) must be identical everywhere — otherwise one
+// occurrence's "GitHub" link points somewhere different from another's.
+const repoById = new Map<string, string>();
+const nameById = new Map<string, string>();
 let pluginCount = 0;
 
 assert.ok(CATALOG.length > 0, "catalog must not be empty");
@@ -44,6 +49,13 @@ for (const cat of CATALOG) {
         `plugin ${p.id} repo must be "owner/repo": got "${p.repo}"`
       );
       assert.ok(p.role.length > 0, `plugin ${p.id} needs a role description`);
+
+      const knownRepo = repoById.get(p.id);
+      if (knownRepo === undefined) repoById.set(p.id, p.repo);
+      else assert.equal(p.repo, knownRepo, `plugin ${p.id} maps to two different repos: "${knownRepo}" vs "${p.repo}"`);
+      const knownName = nameById.get(p.id);
+      if (knownName === undefined) nameById.set(p.id, p.name);
+      else assert.equal(p.name, knownName, `plugin ${p.id} shown under two different names: "${knownName}" vs "${p.name}"`);
     }
   }
 }

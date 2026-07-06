@@ -14,8 +14,19 @@ const STATE_LABEL: Record<InstallState, string> = {
   missing: "Not installed",
 };
 
+function sameSet(a: Set<string>, b: Set<string>): boolean {
+  if (a.size !== b.size) return false;
+  for (const x of a) if (!b.has(x)) return false;
+  return true;
+}
+
+function sameSnapshot(a: InstalledSnapshot, b: InstalledSnapshot): boolean {
+  return sameSet(a.enabled, b.enabled) && sameSet(a.installed, b.installed);
+}
+
 export class SignpostView extends ItemView {
   private snapshot: InstalledSnapshot;
+  private rendered = false;
 
   constructor(leaf: WorkspaceLeaf, private plugin: SignpostPlugin) {
     super(leaf);
@@ -42,14 +53,24 @@ export class SignpostView extends ItemView {
     this.contentEl.empty();
   }
 
-  /** Re-read install state from the app, then repaint. Cheap; called on focus. */
+  /**
+   * Re-read install state and repaint only if something we display actually
+   * changed. `active-leaf-change` fires this whenever the view merely regains
+   * focus, and a full rebuild there would reset the user's scroll position for
+   * nothing — so bail out when the snapshot is identical.
+   */
   refreshAndRender(): void {
-    this.snapshot = readInstalled(this.app);
+    const next = readInstalled(this.app);
+    if (this.rendered && sameSnapshot(this.snapshot, next)) return;
+    this.snapshot = next;
     this.render();
   }
 
   private render(): void {
     const root = this.contentEl;
+    // Preserve scroll across the rebuild so a repaint (filter toggle, real install
+    // change) doesn't jump the user back to the top of the list.
+    const prevScroll = root.scrollTop;
     root.empty();
     root.addClass("signpost-view");
 
@@ -63,6 +84,9 @@ export class SignpostView extends ItemView {
       cls: "signpost-footer",
       text: "Signpost only ever links you to a plugin's page — it never installs or enables anything for you.",
     });
+
+    root.scrollTop = prevScroll;
+    this.rendered = true;
   }
 
   private renderHeader(root: HTMLElement): void {
