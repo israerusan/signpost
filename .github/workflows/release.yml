@@ -1,0 +1,47 @@
+name: Release
+
+# Cut a release by pushing a tag equal to manifest.version, e.g.:
+#   npm version patch      # bumps package.json + manifest.json + versions.json
+#   git push && git push --tags
+# The tag MUST NOT have a leading "v" — Obsidian matches the release tag to
+# manifest.version exactly.
+on:
+  push:
+    tags:
+      - "*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Verify tag matches manifest version
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          MANIFEST_VERSION="$(node -p "require('./manifest.json').version")"
+          if [ "$TAG" != "$MANIFEST_VERSION" ]; then
+            echo "Tag $TAG does not match manifest version $MANIFEST_VERSION" >&2
+            exit 1
+          fi
+
+      - name: Create release with plugin assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            main.js manifest.json styles.css \
+            --title "${GITHUB_REF_NAME}" \
+            --notes "See CHANGELOG.md for details."

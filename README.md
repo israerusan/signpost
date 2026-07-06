@@ -19,6 +19,14 @@ Signpost never installs, enables, or changes anything for you — it only takes 
 
 The route map is **bundled**, not fetched from a server. That means it works fully offline, has no tracking, and never breaks because a remote index went down. The picks are deliberately the load-bearing, long-maintained plugins that don't churn, so the list stays correct for a long time. Updates ship with plugin releases.
 
+## Installation
+
+**From the community directory** (once listed): Settings → Community plugins → Browse → search "Signpost" → Install → Enable.
+
+**Manually, from a release:** download `main.js`, `manifest.json`, and `styles.css` from the [latest release](https://github.com/israerusan/signpost/releases/latest) into `<your vault>/.obsidian/plugins/signpost/`, then enable it under Settings → Community plugins.
+
+**Via [BRAT](https://github.com/TfTHacker/obsidian42-brat)** (for beta testers): add the beta plugin `israerusan/signpost`.
+
 ## Usage
 
 1. Click the **signpost** ribbon icon, or run **Signpost: Open the route map** from the command palette.

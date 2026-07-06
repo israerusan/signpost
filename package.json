@@ -10,7 +10,8 @@
     "typecheck": "tsc -noEmit -skipLibCheck",
     "lint": "tsc --noEmit -p . && eslint . --max-warnings 0",
     "test": "npm run lint && node test/run.mjs",
-    "test:ci": "node test/run.mjs"
+    "test:ci": "node test/run.mjs",
+    "version": "node version-bump.mjs && git add manifest.json versions.json"
   },
   "keywords": [
     "obsidian",
