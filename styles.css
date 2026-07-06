@@ -350,6 +350,15 @@
   text-align: center;
 }
 
+.signpost-section-error {
+  margin: 6px 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--background-modifier-error);
+  color: var(--text-error);
+  font-size: var(--font-ui-smaller);
+}
+
 /* --- Mobile: larger tap targets -------------------------------------------- */
 .is-mobile .signpost-btn {
   min-height: 40px;

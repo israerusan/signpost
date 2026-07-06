@@ -21,7 +21,7 @@ export function openInstallPage(app: App, ref: PluginRef): void {
 
 /** Open the plugin's source on GitHub — the honest fallback / "read more". */
 export function openRepo(ref: PluginRef): void {
-  window.open(`https://github.com/${ref.repo}`);
+  window.open(`https://github.com/${ref.repo}`, "_blank", "noopener");
 }
 
 /**

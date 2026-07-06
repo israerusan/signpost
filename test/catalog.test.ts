@@ -44,9 +44,12 @@ for (const cat of CATALOG) {
       assert.ok(!seen.has(p.id), `duplicate plugin ${p.id} within loadout ${lo.id}`);
       seen.add(p.id);
       assert.ok(p.name.length > 0, `plugin ${p.id} needs a name`);
+      // GitHub owner/repo charset only — excludes URL-significant chars (?, #, :,
+      // whitespace) so `https://github.com/${repo}` can only ever be a github.com
+      // path, never a different host/scheme or a query/fragment breakout.
       assert.ok(
-        /^[^/\s]+\/[^/\s]+$/.test(p.repo),
-        `plugin ${p.id} repo must be "owner/repo": got "${p.repo}"`
+        /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(p.repo),
+        `plugin ${p.id} repo must be "owner/repo" (GitHub charset): got "${p.repo}"`
       );
       assert.ok(p.role.length > 0, `plugin ${p.id} needs a role description`);
 

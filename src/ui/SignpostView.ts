@@ -91,7 +91,18 @@ export class SignpostView extends ItemView {
     this.renderHeader(root);
 
     for (const category of CATALOG) {
-      this.renderCategory(root, category);
+      // Isolate each section: the TS types and the catalog contract test make a
+      // malformed entry unreachable for the shipped build, but render() is the
+      // entire UI — one unexpected throw should degrade a single section, not
+      // leave the whole pane blank.
+      try {
+        this.renderCategory(root, category);
+      } catch {
+        root.createEl("p", {
+          cls: "signpost-section-error",
+          text: `This section (“${category.title}”) couldn't be shown.`,
+        });
+      }
     }
 
     root.createEl("p", {
