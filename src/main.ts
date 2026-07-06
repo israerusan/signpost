@@ -46,10 +46,14 @@ export default class SignpostPlugin extends Plugin {
     await workspace.revealLeaf(leaf);
   }
 
-  /** Repaint any open route-map views (after a settings change). */
+  /**
+   * Repaint any open route-map views after a settings change. Uses forceRefresh,
+   * not refreshAndRender: settings toggles change display-only state that the
+   * install snapshot can't see, so the snapshot gate would otherwise skip them.
+   */
   refreshOpenViews(): void {
     for (const leaf of this.app.workspace.getLeavesOfType(VIEW_TYPE_SIGNPOST)) {
-      if (leaf.view instanceof SignpostView) leaf.view.refreshAndRender();
+      if (leaf.view instanceof SignpostView) leaf.view.forceRefresh();
     }
   }
 

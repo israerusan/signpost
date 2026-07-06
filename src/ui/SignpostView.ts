@@ -51,6 +51,10 @@ export class SignpostView extends ItemView {
 
   async onClose(): Promise<void> {
     this.contentEl.empty();
+    // Keep `rendered` honest: contentEl no longer holds a render, so a reused
+    // instance (deferred views) must rebuild on the next open even if the install
+    // snapshot is unchanged — otherwise the snapshot gate would leave it blank.
+    this.rendered = false;
   }
 
   /**
@@ -63,6 +67,16 @@ export class SignpostView extends ItemView {
     const next = readInstalled(this.app);
     if (this.rendered && sameSnapshot(this.snapshot, next)) return;
     this.snapshot = next;
+    this.render();
+  }
+
+  /**
+   * Unconditional repaint, for changes the install snapshot can't detect —
+   * settings-tab toggles (hide-installed, expand-all) mutate display-only state,
+   * so they must bypass the snapshot gate that `refreshAndRender` applies.
+   */
+  forceRefresh(): void {
+    this.snapshot = readInstalled(this.app);
     this.render();
   }
 
