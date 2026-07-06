@@ -130,7 +130,7 @@ export class SignpostView extends ItemView {
       void this.plugin.saveSettings();
       this.render();
     });
-    toggle.createSpan({ text: "Hide what I already have" });
+    toggle.createSpan({ text: "Hide what I've already enabled" });
   }
 
   private renderCategory(root: HTMLElement, category: Category): void {

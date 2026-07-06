@@ -21,7 +21,7 @@ The route map is **bundled**, not fetched from a server. That means it works ful
 
 ## Usage
 
-1. Click the **signpost** ribbon icon, or run **Signpost: open the route map** from the command palette.
+1. Click the **signpost** ribbon icon, or run **Signpost: Open the route map** from the command palette.
 2. A panel opens in the right sidebar. Expand the problem that matches what you're trying to do.
 3. Read the loadout, check what you're missing, and click **Open install page** on anything you want.
 
