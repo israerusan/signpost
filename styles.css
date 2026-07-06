@@ -326,3 +326,17 @@
   font-size: var(--font-ui-smaller);
   text-align: center;
 }
+
+/* --- Mobile: larger tap targets -------------------------------------------- */
+.is-mobile .signpost-btn {
+  min-height: 40px;
+  padding: 8px 12px;
+}
+
+.is-mobile .signpost-btn-link {
+  padding: 8px 10px;
+}
+
+.is-mobile .signpost-toggle {
+  min-height: 40px;
+}

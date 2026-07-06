@@ -238,10 +238,10 @@ export class SignpostView extends ItemView {
     const actions = main.createDiv({ cls: "signpost-actions" });
     if (state === "missing") {
       const install = actions.createEl("button", { cls: "signpost-btn signpost-btn-primary", text: "Open install page" });
-      install.addEventListener("click", () => openInstallPage(ref));
+      install.addEventListener("click", () => openInstallPage(this.app, ref));
     } else {
       const view = actions.createEl("button", { cls: "signpost-btn signpost-btn-ghost", text: "View in directory" });
-      view.addEventListener("click", () => openInstallPage(ref));
+      view.addEventListener("click", () => openInstallPage(this.app, ref));
     }
     const repo = actions.createEl("button", { cls: "signpost-btn signpost-btn-link", text: "GitHub" });
     repo.addEventListener("click", () => openRepo(ref));

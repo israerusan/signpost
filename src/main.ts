@@ -40,8 +40,9 @@ export default class SignpostPlugin extends Plugin {
       await workspace.revealLeaf(existing[0]);
       return;
     }
-    const leaf: WorkspaceLeaf | null = workspace.getRightLeaf(false);
-    if (!leaf) return;
+    // getRightLeaf can return null; fall back to a normal leaf so the ribbon/command
+    // never silently does nothing (notably on mobile's drawer layout).
+    const leaf: WorkspaceLeaf = workspace.getRightLeaf(false) ?? workspace.getLeaf(true);
     await leaf.setViewState({ type: VIEW_TYPE_SIGNPOST, active: true });
     await workspace.revealLeaf(leaf);
   }
