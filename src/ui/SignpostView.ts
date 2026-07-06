@@ -82,7 +82,9 @@ export class SignpostView extends ItemView {
     const refreshBtn = bar.createEl("button", { cls: "signpost-btn signpost-btn-ghost", text: "Refresh status" });
     refreshBtn.addEventListener("click", () => this.refreshAndRender());
 
-    const toggle = bar.createDiv({ cls: "signpost-toggle" });
+    // A <label> wrapping the checkbox: clicking the text toggles it and assistive
+    // tech announces the text as the control's name (no id/for wiring needed).
+    const toggle = bar.createEl("label", { cls: "signpost-toggle" });
     const cb = toggle.createEl("input", { type: "checkbox" });
     cb.checked = this.plugin.settings.hideInstalled;
     cb.addEventListener("change", () => {
@@ -90,7 +92,7 @@ export class SignpostView extends ItemView {
       void this.plugin.saveSettings();
       this.render();
     });
-    toggle.createEl("label", { text: "Hide what I already have" });
+    toggle.createSpan({ text: "Hide what I already have" });
   }
 
   private renderCategory(root: HTMLElement, category: Category): void {
@@ -98,6 +100,11 @@ export class SignpostView extends ItemView {
     const section = root.createDiv({ cls: "signpost-category" });
 
     const head = section.createDiv({ cls: "signpost-category-head" });
+    // Not a real <button> (it wraps heading/paragraph block content); give it the
+    // button role, focusability, and keyboard activation so it isn't mouse-only.
+    head.setAttribute("role", "button");
+    head.setAttribute("tabindex", "0");
+    head.setAttribute("aria-expanded", String(!collapsed));
     const chevron = head.createSpan({ cls: "signpost-chevron" });
     setIcon(chevron, collapsed ? "chevron-right" : "chevron-down");
     setIcon(head.createSpan({ cls: "signpost-category-icon" }), category.icon);
@@ -108,20 +115,32 @@ export class SignpostView extends ItemView {
     const body = section.createDiv({ cls: "signpost-category-body" });
     if (collapsed) body.addClass("is-collapsed");
 
-    head.addEventListener("click", () => void this.toggleCategory(category.id, body, chevron));
+    head.addEventListener("click", () => void this.toggleCategory(category.id, head, body, chevron));
+    head.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        void this.toggleCategory(category.id, head, body, chevron);
+      }
+    });
 
     for (const loadout of category.loadouts) {
       this.renderLoadout(body, loadout);
     }
   }
 
-  private async toggleCategory(id: string, body: HTMLElement, chevron: HTMLElement): Promise<void> {
+  private async toggleCategory(
+    id: string,
+    head: HTMLElement,
+    body: HTMLElement,
+    chevron: HTMLElement
+  ): Promise<void> {
     const list = this.plugin.settings.collapsedCategories;
     const idx = list.indexOf(id);
     const nowCollapsed = idx === -1;
     if (nowCollapsed) list.push(id);
     else list.splice(idx, 1);
     body.toggleClass("is-collapsed", nowCollapsed);
+    head.setAttribute("aria-expanded", String(!nowCollapsed));
     setIcon(chevron, nowCollapsed ? "chevron-right" : "chevron-down");
     await this.plugin.saveSettings();
   }

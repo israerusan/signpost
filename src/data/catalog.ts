@@ -138,7 +138,7 @@ export const CATALOG: Category[] = [
           {
             id: "obsidian-kanban",
             name: "Kanban",
-            repo: "mgmeyers/obsidian-kanban",
+            repo: "obsidian-community/obsidian-kanban",
             role: "Trello-style boards stored as plain Markdown, good for project stages.",
           },
           {
@@ -207,7 +207,7 @@ export const CATALOG: Category[] = [
           {
             id: "obsidian-zotero-desktop-connector",
             name: "Zotero Integration",
-            repo: "mgmeyers/obsidian-zotero-integration",
+            repo: "obsidian-community/obsidian-zotero-integration",
             role: "Import citations, PDF annotations, and formatted bibliographies from Zotero.",
             core: true,
             note: "Requires the Zotero desktop app; the heavier but more capable option.",
@@ -246,7 +246,7 @@ export const CATALOG: Category[] = [
           {
             id: "obsidian-style-settings",
             name: "Style Settings",
-            repo: "mgmeyers/obsidian-style-settings",
+            repo: "obsidian-community/obsidian-style-settings",
             role: "A control panel for theme options — customize without touching CSS. Many themes require it.",
             core: true,
           },
@@ -259,7 +259,7 @@ export const CATALOG: Category[] = [
           {
             id: "cmdr",
             name: "Commander",
-            repo: "phibr0/obsidian-commander",
+            repo: "jsmorabito/obsidian-commander",
             role: "Add, hide, and rearrange command buttons across the ribbon, titlebar, and menus.",
           },
         ],
@@ -314,7 +314,7 @@ export const CATALOG: Category[] = [
   {
     id: "automation",
     title: "I want to automate & build dashboards",
-    icon: "wand-sparkles",
+    icon: "wand-2",
     blurb: "The power-user tier. High leverage, higher learning curve — add these when you have a concrete workflow in mind.",
     loadouts: [
       {
