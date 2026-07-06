@@ -9,8 +9,11 @@ import type { Category } from "../types";
  *     category of tools".
  *   - Lean. Each loadout names a small set and marks the true essentials `core`.
  *     The goal is to install LESS, not to catalog everything.
- *   - Stable picks only. These are the load-bearing, long-maintained plugins that
- *     don't churn — so a bundled list stays correct for a long time.
+ *   - Stable picks. These are load-bearing, widely-used plugins that don't churn,
+ *     so a bundled list stays correct for a long time. Where a pick has gone quiet
+ *     (maintenance mode) or core Obsidian has since absorbed its job (e.g. Bases
+ *     for dashboards, the 1.5 table editor), its `note` says so honestly rather
+ *     than pretending it's the only way.
  *
  * `id` must be the real community plugin id (used for install-detection and the
  * `obsidian://show-plugin?id=` deep link). `repo` is the GitHub fallback link.
@@ -33,8 +36,8 @@ export const CATALOG: Category[] = [
             id: "table-editor-obsidian",
             name: "Advanced Tables",
             repo: "tgrosinger/advanced-tables-obsidian",
-            role: "Makes Markdown tables actually editable — auto-formats columns and adds Tab navigation.",
-            core: true,
+            role: "Adds what core's table editor doesn't: Tab navigation, sort-by-column, spreadsheet-style formulas, and CSV export.",
+            note: "Obsidian 1.5+ edits tables natively, so add this only if you want the extras above.",
           },
           {
             id: "obsidian-outliner",
@@ -81,6 +84,7 @@ export const CATALOG: Category[] = [
             repo: "liamcain/obsidian-calendar-plugin",
             role: "A month view in the sidebar; click any day to open or create its note.",
             core: true,
+            note: "Ubiquitous and stable, but rarely updated now — fine to rely on, just don't expect new features.",
           },
           {
             id: "templater-obsidian",
@@ -94,7 +98,7 @@ export const CATALOG: Category[] = [
             name: "Periodic Notes",
             repo: "liamcain/obsidian-periodic-notes",
             role: "Adds weekly, monthly, and yearly notes with the same template treatment.",
-            note: "Add once daily notes are a habit — not on day one.",
+            note: "Add once daily notes are a habit — not on day one. Maintenance has been quiet since 2022, but it still works; some users prefer a community fork.",
           },
           {
             id: "homepage",
@@ -118,7 +122,7 @@ export const CATALOG: Category[] = [
         title: "Tasks & project tracking",
         problem: "My to-dos are buried across dozens of notes and I can't see what's due.",
         summary:
-          "Tasks lets you write a checkbox anywhere with a due date, then query all of them into one list ('everything due this week'). Dataview is the general engine behind most dashboards — install it once and many other workflows light up. Kanban is optional, for people who think in boards.",
+          "Tasks lets you write a checkbox anywhere with a due date, then query all of them into one list ('everything due this week'). For broader dashboards that gather notes, turn on Obsidian's built-in Bases core plugin first — it's native and GUI-driven, no query language needed. Reach for Dataview only when you outgrow that. Kanban is optional, for people who think in boards.",
         plugins: [
           {
             id: "obsidian-tasks-plugin",
@@ -131,9 +135,8 @@ export const CATALOG: Category[] = [
             id: "dataview",
             name: "Dataview",
             repo: "blacksmithgu/obsidian-dataview",
-            role: "Turns your notes into a queryable database — the backbone of most dashboards and indexes.",
-            core: true,
-            note: "The one 'power' plugin worth learning early; a huge number of community workflows assume it.",
+            role: "Turns your notes into a queryable database (DQL) — powers custom indexes and reading logs.",
+            note: "Try the core Bases plugin first; it now covers most dashboards with a GUI. Add Dataview when you need DQL's flexibility — but note it's in maintenance mode (last release 2025).",
           },
           {
             id: "obsidian-kanban",
@@ -217,7 +220,7 @@ export const CATALOG: Category[] = [
             name: "Citations",
             repo: "hans/obsidian-citation-plugin",
             role: "Insert citations from a BibTeX/CSL library — simpler if you don't need full Zotero sync.",
-            note: "Overlaps with Zotero Integration; pick one based on how deep your Zotero use is.",
+            note: "Overlaps with Zotero Integration; pick one based on how deep your Zotero use is. Note it's been unmaintained since 2022 — lean toward Zotero Integration unless you specifically want the lighter tool.",
           },
           {
             id: "obsidian-spaced-repetition",
@@ -278,14 +281,15 @@ export const CATALOG: Category[] = [
         title: "Search & navigation",
         problem: "My vault grew and now I can't find what I know is in there.",
         summary:
-          "Omnisearch adds fuzzy, ranked, typo-tolerant search (including inside PDFs) far beyond core search. Recent Files gets you back to where you were. Tag Wrangler lets you rename and merge tags so your tagging doesn't rot.",
+          "Omnisearch adds fuzzy, ranked, typo-tolerant search far beyond core search. Recent Files gets you back to where you were. Tag Wrangler lets you rename and merge tags so your tagging doesn't rot.",
         plugins: [
           {
             id: "omnisearch",
             name: "Omnisearch",
             repo: "scambier/obsidian-omnisearch",
-            role: "Smart, ranked, typo-tolerant search that also looks inside PDFs and images.",
+            role: "Smart, ranked, typo-tolerant search across your notes.",
             core: true,
+            note: "To also search inside PDFs and images, add its companion plugin Text Extractor.",
           },
           {
             id: "recent-files-obsidian",
@@ -322,14 +326,14 @@ export const CATALOG: Category[] = [
         title: "Automation & dashboards",
         problem: "I keep doing the same manual steps and want my vault to assemble views for me.",
         summary:
-          "Dataview queries your notes into live tables and lists (dashboards, indexes, reading logs). Templater scripts repetitive note creation. QuickAdd wires it all to one-shortcut capture. Advanced URI lets other apps and shortcuts drive Obsidian from outside.",
+          "For dashboards, start with Obsidian's built-in Bases core plugin — it builds tables and views natively, with a GUI and no query language. Dataview goes further with DQL when you need it (now in maintenance mode). Templater scripts repetitive note creation. QuickAdd wires it all to one-shortcut capture. Advanced URI lets other apps and shortcuts drive Obsidian from outside.",
         plugins: [
           {
             id: "dataview",
             name: "Dataview",
             repo: "blacksmithgu/obsidian-dataview",
-            role: "Query notes into live tables/lists — the foundation of nearly every dashboard.",
-            core: true,
+            role: "Query notes into live tables/lists with DQL, when the core Bases GUI isn't enough.",
+            note: "Turn on core Bases first for GUI dashboards; Dataview is in maintenance mode (last release 2025) but still unmatched for complex DQL.",
           },
           {
             id: "templater-obsidian",
