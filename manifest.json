@@ -1,0 +1,10 @@
+{
+  "id": "signpost",
+  "name": "Signpost",
+  "version": "0.1.0",
+  "minAppVersion": "1.4.0",
+  "description": "Tell it what you're trying to do and it maps out which community add-ons to install, highlighting the ones you already have.",
+  "author": "Israel Avila",
+  "authorUrl": "https://github.com/israerusan",
+  "isDesktopOnly": false
+}

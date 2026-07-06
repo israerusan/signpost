@@ -1,0 +1,328 @@
+/* Signpost — sidebar route map. All colors come from Obsidian theme variables so
+   it adapts to any theme, light or dark. */
+
+.signpost-view {
+  padding: 0 12px 24px;
+  font-size: var(--font-ui-small);
+  line-height: 1.45;
+}
+
+/* --- Header ---------------------------------------------------------------- */
+.signpost-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--background-secondary);
+  padding: 12px 0 8px;
+  margin: 0 0 8px;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.signpost-title {
+  margin: 0;
+  font-size: var(--font-ui-large);
+}
+
+.signpost-tagline {
+  margin: 4px 0 8px;
+  color: var(--text-muted);
+}
+
+.signpost-creed {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--background-modifier-hover);
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+}
+
+.signpost-creed-icon {
+  color: var(--color-green);
+  flex-shrink: 0;
+}
+
+.signpost-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.signpost-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+}
+
+/* --- Buttons --------------------------------------------------------------- */
+.signpost-btn {
+  cursor: pointer;
+  font-size: var(--font-ui-smaller);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--interactive-normal);
+  color: var(--text-normal);
+}
+
+.signpost-btn:hover {
+  background: var(--interactive-hover);
+}
+
+.signpost-btn-primary {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-color: var(--interactive-accent);
+}
+
+.signpost-btn-primary:hover {
+  background: var(--interactive-accent-hover);
+}
+
+.signpost-btn-ghost {
+  background: transparent;
+}
+
+.signpost-btn-link {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-muted);
+  padding: 4px 6px;
+}
+
+.signpost-btn-link:hover {
+  color: var(--text-normal);
+  text-decoration: underline;
+}
+
+/* --- Category -------------------------------------------------------------- */
+.signpost-category {
+  margin: 6px 0;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.signpost-category-head {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 12px;
+  cursor: pointer;
+  background: var(--background-primary);
+}
+
+.signpost-category-head:hover {
+  background: var(--background-modifier-hover);
+}
+
+.signpost-chevron,
+.signpost-category-icon {
+  color: var(--text-muted);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.signpost-category-icon {
+  color: var(--interactive-accent);
+}
+
+.signpost-category-titles h3 {
+  margin: 0;
+  font-size: var(--font-ui-medium);
+}
+
+.signpost-category-blurb {
+  margin: 2px 0 0;
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+}
+
+.signpost-category-body {
+  padding: 4px 12px 12px;
+}
+
+.signpost-category-body.is-collapsed {
+  display: none;
+}
+
+/* --- Loadout --------------------------------------------------------------- */
+.signpost-loadout {
+  padding: 10px 0;
+  border-top: 1px dashed var(--background-modifier-border);
+}
+
+.signpost-loadout:first-child {
+  border-top: none;
+}
+
+.signpost-problem {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  font-weight: var(--font-semibold);
+  color: var(--text-normal);
+}
+
+.signpost-problem-icon {
+  color: var(--interactive-accent);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.signpost-summary {
+  margin: 6px 0 10px;
+  color: var(--text-muted);
+}
+
+.signpost-allset {
+  margin: 6px 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--background-modifier-success);
+  color: var(--text-normal);
+  font-size: var(--font-ui-smaller);
+}
+
+/* --- Plugin row ------------------------------------------------------------ */
+.signpost-plugins {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.signpost-plugin {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 8px;
+  background: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+}
+
+.signpost-plugin.is-core {
+  border-color: var(--interactive-accent);
+}
+
+.signpost-plugin.is-enabled {
+  opacity: 0.72;
+}
+
+.signpost-status {
+  flex-shrink: 0;
+}
+
+.signpost-dot {
+  display: inline-flex;
+}
+
+.signpost-dot.is-enabled {
+  color: var(--color-green);
+}
+
+.signpost-dot.is-installed {
+  color: var(--color-yellow);
+}
+
+.signpost-dot.is-missing {
+  color: var(--text-faint);
+}
+
+.signpost-plugin-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.signpost-name-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.signpost-name {
+  font-weight: var(--font-semibold);
+}
+
+.signpost-badge {
+  font-size: var(--font-ui-smaller);
+  padding: 0 6px;
+  border-radius: 10px;
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.signpost-state-label {
+  margin-left: auto;
+  font-size: var(--font-ui-smaller);
+  color: var(--text-faint);
+}
+
+.signpost-state-label.is-enabled {
+  color: var(--color-green);
+}
+
+.signpost-state-label.is-installed {
+  color: var(--color-yellow);
+}
+
+.signpost-role {
+  margin-top: 2px;
+  color: var(--text-muted);
+}
+
+.signpost-note {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  margin-top: 4px;
+  color: var(--text-accent);
+  font-size: var(--font-ui-smaller);
+}
+
+.signpost-note-icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.signpost-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+/* --- Tip & footer ---------------------------------------------------------- */
+.signpost-tip {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  margin-top: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--background-modifier-hover);
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+}
+
+.signpost-tip-icon {
+  color: var(--color-yellow);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.signpost-footer {
+  margin-top: 16px;
+  color: var(--text-faint);
+  font-size: var(--font-ui-smaller);
+  text-align: center;
+}
