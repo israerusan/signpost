@@ -39,5 +39,21 @@ export class SignpostSettingTab extends PluginSettingTab {
       .addButton((b) =>
         b.setButtonText("Open browser").onClick(() => openCommunityBrowser(this.app))
       );
+
+    new Setting(containerEl).setName("Feedback").setHeading();
+
+    new Setting(containerEl)
+      .setName("Bugs and feature requests")
+      .setDesc("Issues and ideas are tracked on GitHub. Opens in your browser.")
+      .addButton((b) =>
+        b.setButtonText("Report a bug").onClick(() => {
+          window.open("https://github.com/israerusan/signpost/issues/new?labels=bug");
+        })
+      )
+      .addButton((b) =>
+        b.setButtonText("Request a feature").onClick(() => {
+          window.open("https://github.com/israerusan/signpost/issues/new?labels=enhancement");
+        })
+      );
   }
 }
