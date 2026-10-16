@@ -3,7 +3,7 @@
   "name": "Signpost",
   "version": "0.1.0",
   "minAppVersion": "1.6.0",
-  "description": "Tell it what you're trying to do and it maps out which community add-ons to install, highlighting the ones you already have.",
+  "description": "Describe what you are trying to set up and get a map of which community add-ons to install, with the ones you already have marked.",
   "author": "Israel Avila",
   "authorUrl": "https://github.com/israerusan",
   "isDesktopOnly": false
